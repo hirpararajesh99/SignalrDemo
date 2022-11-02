@@ -1,0 +1,68 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+<div class="card-footer border-0 text-trout-800 bg-white py-4 px-2">
+    <div id="chart"></div>
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {       
+        loadData();
+    });
+    var options = {
+        chart: {
+            type: 'line',
+            zoom: {
+                enabled: true
+            }
+
+        },        
+        series: [{ name: 'PE-CE' }],
+        xaxis: {
+            categories: []
+        },
+        stroke: {
+            show: true,
+            curve: 'straight',
+            lineCap: 'butt',
+            colors: undefined,
+            width: 2,
+            dashArray: 0,
+        },
+        annotations: {
+            yaxis: [
+                {
+                    y: 0,
+                    strokeDashArray: 0,
+                    borderColor: 'black',
+                    borderWidth: 2,
+                    opacity: 1
+                }
+            ]
+        }
+    }
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    function loadData() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChartData", "Chart")',
+            async:false,
+            data: {
+                name: 'Banknifty'
+            },
+            success: function (data) {
+                chart.updateSeries([{
+                    data: data
+                }])
+            }
+        });
+    }
+
+</script>
